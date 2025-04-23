@@ -1,8 +1,21 @@
 import streamlit as st
 import joblib
 import pandas as pd
+import os
+import requests
 
-model = joblib.load('diamond_price_pred.pkl')
+# Download model if not present locally
+model_path = 'diamond_price_pred.pkl'
+if not os.path.exists(model_path):
+    st.info("Downloading model file...")
+    # Replace with your actual storage URL
+    url = "https://your-storage-url.com/diamond_price_pred.pkl"
+    r = requests.get(url, allow_redirects=True)
+    with open(model_path, 'wb') as f:
+        f.write(r.content)
+    st.success("Model downloaded successfully!")
+
+model = joblib.load(model_path)
 
 # Streamlit UI
 st.title("💎 Diamond Price Prediction 💎")
